@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"sync"
@@ -19,7 +20,8 @@ const (
 // ListManager represents the logic on the lists
 type ListManager interface {
 	// AddRating appends today's rating to the userID's myList
-	AddRating(userID string, score int) (*Rating, error)
+	AddRating(userID, notes string, score int) (*Rating, error)
+	GetLastRating(userID string) (*Rating, bool, error)
 	// GetUserName returns the readable username from userID
 	GetUserName(userID string) string
 }
@@ -77,12 +79,27 @@ func (p *Plugin) ServeHTTP(c *plugin.Context, w http.ResponseWriter, r *http.Req
 	switch r.URL.Path {
 	case "/add":
 		p.handleAdd(w, r)
+	case "/getlast":
+		p.handleGetLast(w, r)
 	case "/test":
 		fmt.Fprint(w, "Test passed")
 	default:
 		//http.NotFound(w, r)
 		fmt.Fprint(w, "Welcome to Mental Health Coach!")
 	}
+}
+
+type addAPIRequest struct {
+	Score int    `json:"score"`
+	Notes string `json:"notes"`
+}
+
+type getLastAPIRequest struct {
+	ID        string `json:"id"`
+	Score     int    `json:"score"`
+	CreatedAt int64  `json:"created_at"`
+	Notes     string `json:"notes"`
+	Today     bool   `json:"today"`
 }
 
 func (p *Plugin) handleAdd(w http.ResponseWriter, r *http.Request) {
@@ -92,12 +109,68 @@ func (p *Plugin) handleAdd(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	myscore := 10
-
-	_, err := p.listManager.AddRating(userID, myscore)
+	var addRequest *addAPIRequest
+	decoder := json.NewDecoder(r.Body)
+	err := decoder.Decode(&addRequest)
 	if err != nil {
-		p.API.LogError("Unable to add rating err=" + err.Error())
+		p.API.LogError("Unable to decode JSON err=" + err.Error())
+		p.handleErrorWithCode(w, http.StatusBadRequest, "Unable to decode JSON", err)
 		return
 	}
 
+	myScore := addRequest.Score
+
+	if myScore >= 1 && myScore <= 10 {
+		_, err := p.listManager.AddRating(userID, addRequest.Notes, myScore)
+		if err != nil {
+			p.API.LogError("Unable to add rating err=" + err.Error())
+			p.handleErrorWithCode(w, http.StatusBadRequest, "Unable to decode JSON", err)
+			return
+		}
+	} else {
+		p.API.LogError("Unable to add rating, nothing with range 1-10 ")
+		p.handleErrorWithCode(w, http.StatusBadRequest, "Rating score out of range", err)
+		return
+	}
+
+}
+
+func (p *Plugin) handleGetLast(w http.ResponseWriter, r *http.Request) {
+	userID := r.Header.Get("Mattermost-User-ID")
+	if userID == "" {
+		http.Error(w, "Not authorized", http.StatusUnauthorized)
+		return
+	}
+	rating, today, err := p.listManager.GetLastRating(userID)
+	if err != nil {
+		p.API.LogError("Unable to get rating for user err=" + err.Error())
+		p.handleErrorWithCode(w, http.StatusInternalServerError, "Unable to get rating for user", err)
+		return
+	}
+
+	resp := getLastAPIRequest{ID: rating.ID, Score: rating.Score, CreatedAt: rating.CreateAt, Notes: rating.Notes, Today: today}
+
+	ratingJSON, err := json.Marshal(resp)
+	if err != nil {
+		p.API.LogError("Unable marhsal issues list to json err=" + err.Error())
+		p.handleErrorWithCode(w, http.StatusInternalServerError, "Unable marhsal issues list to json", err)
+		return
+	}
+	p.API.LogInfo(string(ratingJSON))
+	_, err = w.Write(ratingJSON)
+	if err != nil {
+		p.API.LogError("Unable to write json response err=" + err.Error())
+	}
+}
+
+func (p *Plugin) handleErrorWithCode(w http.ResponseWriter, code int, errTitle string, err error) {
+	w.WriteHeader(code)
+	b, _ := json.Marshal(struct {
+		Error   string `json:"error"`
+		Details string `json:"details"`
+	}{
+		Error:   errTitle,
+		Details: err.Error(),
+	})
+	_, _ = w.Write(b)
 }

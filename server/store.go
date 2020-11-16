@@ -54,6 +54,18 @@ func (l *listStore) getList(userID string) ([]*Rating, []byte, error) {
 	return list, originalJSONList, nil
 }
 
+func (l *listStore) GetLastRating(userID string) (*Rating, error) {
+	list, err := l.GetList(userID)
+	if err != nil {
+		return nil, nil
+	}
+	if len(list) == 0 {
+		return nil, errors.New("No ratings found")
+	}
+	lastRating := list[len(list)-1]
+	return lastRating, nil
+}
+
 func (l *listStore) AddRating(userID string, rating *Rating) error {
 
 	for i := 0; i < StoreRetries; i++ {

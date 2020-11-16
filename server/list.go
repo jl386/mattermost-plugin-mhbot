@@ -1,6 +1,10 @@
 package main
 
-import "github.com/mattermost/mattermost-server/v5/plugin"
+import (
+	"time"
+
+	"github.com/mattermost/mattermost-server/v5/plugin"
+)
 
 const (
 	// MyListKey is the key used to store the list of the owned ratings
@@ -11,8 +15,9 @@ const (
 type ListStore interface {
 	// Score related function
 	AddRating(userID string, rating *Rating) error
-	// Issue References related functions
 
+	// Issue References related functions
+	GetLastRating(userID string) (*Rating, error)
 	GetList(userID string) ([]*Rating, error)
 }
 
@@ -37,13 +42,28 @@ func (l *listManager) GetUserName(userID string) string {
 	return user.Username
 }
 
-func (l *listManager) AddRating(userID string, score int) (*Rating, error) {
+func (l *listManager) AddRating(userID, notes string, score int) (*Rating, error) {
 
-	rating := newRating(score)
+	rating := newRating(notes, score)
 
 	if err := l.store.AddRating(userID, rating); err != nil {
 		return nil, err
 	}
 
 	return rating, nil
+}
+
+func (l *listManager) GetLastRating(userID string) (*Rating, bool, error) {
+	// Get last rating
+	rating, err := l.store.GetLastRating(userID)
+	if err != nil {
+		return nil, false, err
+	}
+	// Check if last rating was shared today
+	ca := time.Unix(rating.CreateAt/1000, 0)
+	now := time.Now()
+	if now.Day() == ca.Day() && now.Month() == ca.Month() && now.Year() == ca.Year() {
+		return rating, true, nil
+	}
+	return rating, false, nil
 }

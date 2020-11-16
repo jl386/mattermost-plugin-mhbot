@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"regexp"
+	"strconv"
 	"strings"
 
 	"github.com/mattermost/mattermost-server/v5/model"
@@ -15,22 +17,31 @@ const (
 	commandTriggerInfo = "info"
 )
 
+func getHelp() string {
+	return `Available Commands:
+
+add [score]
+	Adds a Mental Health Daily Score.
+
+`
+}
+
 func getCommand() *model.Command {
 	return &model.Command{
 		Trigger:          "headcoach",
 		DisplayName:      "Mental Health Coach",
 		Description:      "Mental Health Coach helps you keep your emotions in check.",
 		AutoComplete:     true,
-		AutoCompleteDesc: "Available commands: preview, help, list, set_channel_welcome, get_channel_welcome, delete_channel_welcome",
+		AutoCompleteDesc: "Available commands: add, help, list",
 		AutoCompleteHint: "[command]",
 	}
 }
 
-func (p *Plugin) postCommandResponse(args *model.CommandArgs, text string, textArgs ...interface{}) {
+func (p *Plugin) postCommandResponse(args *model.CommandArgs, text string) {
 	post := &model.Post{
 		UserId:    p.botUserID,
 		ChannelId: args.ChannelId,
-		Message:   fmt.Sprintf(text, textArgs...),
+		Message:   text,
 	}
 	_ = p.API.SendEphemeralPost(args.UserId, post)
 }
@@ -50,39 +61,70 @@ func (p *Plugin) executeCommandInfo(args *model.CommandArgs) {
 	p.postCommandResponse(args, "Howdy, I'm your virtual Head Coach.\n\nI can help you ensure you keep your emotional health in shape.\n\nEmotional health allows you to work productively and cope with the stresses of everyday life. By checking in on a regular-basis, I will help you become more aware of your emotions and reactions. I will help you notice what in your life makes you sad, frustrated, or angry.\n\nTogether we can help address or change those things over time. If you'd rather to speak to a human (instead of a pesky bot), I will happily assist by matching you with an available Mental Health First Aider.\n\nThanks for taking an interest.\n\nYours forever,\nHead Coach")
 }
 
-func (p *Plugin) ExecuteCommand(_ *plugin.Context, args *model.CommandArgs) (*model.CommandResponse, *model.AppError) {
-	split := strings.Fields(args.Command)
-	command := split[0]
-	parameters := []string{}
-	action := ""
-	if len(split) > 1 {
-		action = split[1]
+// ExecuteCommand executes a given command and returns a command response.
+func (p *Plugin) ExecuteCommand(c *plugin.Context, args *model.CommandArgs) (*model.CommandResponse, *model.AppError) {
+	spaceRegExp := regexp.MustCompile(`\s+`)
+	trimmedArgs := spaceRegExp.ReplaceAllString(strings.TrimSpace(args.Command), " ")
+	stringArgs := strings.Split(trimmedArgs, " ")
+	lengthOfArgs := len(stringArgs)
+	restOfArgs := []string{}
+
+	var handler func([]string, *model.CommandArgs) (bool, error)
+	if lengthOfArgs == 1 {
+		handler = p.runListCommand
+	} else {
+		command := stringArgs[1]
+		if lengthOfArgs > 2 {
+			restOfArgs = stringArgs[2:]
+		}
+		switch command {
+		case "add":
+			handler = p.runAddCommand
+		default:
+			p.postCommandResponse(args, getHelp())
+			return &model.CommandResponse{}, nil
+		}
 	}
-	if len(split) > 2 {
-		parameters = split[2:]
+	isUserError, err := handler(restOfArgs, args)
+	if err != nil {
+		if isUserError {
+			p.postCommandResponse(args, fmt.Sprintf("__Error: %s.__\n\nRun `/todo help` for usage instructions.", err.Error()))
+		} else {
+			p.API.LogError(err.Error())
+			p.postCommandResponse(args, "An unknown error occurred. Please talk to your system administrator for help.")
+		}
 	}
 
-	if command != "/headcoach" {
-		return &model.CommandResponse{}, nil
-	}
-
-	if response := p.validateCommand(action, parameters); response != "" {
-		p.postCommandResponse(args, response)
-		return &model.CommandResponse{}, nil
-	}
-
-	switch action {
-	case commandTriggerInfo:
-		p.executeCommandInfo(args)
-		return &model.CommandResponse{}, nil
-	case commandTriggerHelp:
-		fallthrough
-	case "":
-		text := "###### Mattermost Headcoach Plugin - Slash Command Help\n" + strings.ReplaceAll(commandHelp, "|", "`")
-		p.postCommandResponse(args, text)
-		return &model.CommandResponse{}, nil
-	}
-
-	p.postCommandResponse(args, "Unknown action %v", action)
 	return &model.CommandResponse{}, nil
+}
+
+func (p *Plugin) runListCommand(args []string, extra *model.CommandArgs) (bool, error) {
+
+	p.API.LogInfo("Run list command")
+	return true, nil
+}
+
+func (p *Plugin) runAddCommand(args []string, extra *model.CommandArgs) (bool, error) {
+	r := strings.Join(args, " ")
+	if r == "" {
+		p.postCommandResponse(extra, "Please include a score between 1 and 10.")
+		return false, nil
+	}
+
+	score, err := strconv.Atoi(r)
+	if err != nil {
+		p.postCommandResponse(extra, "Input must be an integer between 1 and 10.")
+		return false, nil
+	}
+
+	if score >= 1 && score <= 10 {
+		_, err := p.listManager.AddRating(extra.UserId, "", score)
+		if err != nil {
+			return false, err
+		}
+		p.postCommandResponse(extra, "Thanks for sharing!")
+		return true, nil
+	}
+	p.postCommandResponse(extra, "Score must be between 1 and 10")
+	return false, nil
 }
