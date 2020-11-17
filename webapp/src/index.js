@@ -43,14 +43,6 @@ export default class Plugin {
             "Share how you are feeling today."
         );
 
-        const refresh = ({ data: { lastRating } }) => store.dispatch(getLast());
-
-        registry.registerWebSocketEventHandler(
-            `custom_${pluginId}_refresh`,
-            refresh
-        );
-        registry.registerReconnectHandler(refresh);
-
         store.dispatch(getLast());
 
         activityFunc = () => {

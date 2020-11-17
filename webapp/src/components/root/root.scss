@@ -12,9 +12,10 @@
   }
 
   h1 {
-    font-size: 32px;
-    margin-bottom: 40px;
+    font-size: 38px;
     margin-top: 16px;
+    margin-bottom: 20px;
+
     text-align: center;
     font-weight: 300;
     line-height: 1;
@@ -23,12 +24,86 @@
     }
   }
   h2 {
+    padding-left: 75px;
+    padding-right: 75px;
+    text-align: center;
     font-weight: 300;
+    line-height: 1.4;
+    font-style: italic;
     strong {
       font-weight: 400;
     }
   }
+  h3 {
+    margin-top: 20px;
+    font-size: x-large;
+  }
+  h6 {
+    font-size: x-small;
+    text-decoration: italic;
+  }
 
+  blockquote {
+    position: relative;
+    font-size: x-large;
+    margin-left: 5em;
+    margin-right: 5em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    padding: 0.5em 2em 0.5em 3em;
+    font-style: italic;
+  }
+  /* Thanks: http://callmenick.com/post/styling-blockquotes-with-css-pseudo-classes */
+  blockquote:before {
+    font-family: Georgia, serif;
+    position: absolute;
+    font-size: 6em;
+    line-height: 1;
+    top: 0;
+    left: 0;
+    content: "\201C";
+  }
+  blockquote:after {
+    font-family: Georgia, serif;
+    position: absolute;
+    /* display: block; don't use this, it raised the quote too high from the bottom - defeated line-height? */
+    float: right;
+    font-size: 6em;
+    line-height: 1;
+    right: 0;
+    bottom: -0.5em;
+    content: "\201D";
+  }
+  blockquote footer {
+    padding: 0 2em 0 0;
+    text-align: right;
+  }
+  blockquote cite:before {
+    content: "\2013";
+  }
+
+  .choices {
+    display: flex;
+  }
+  .choices-img {
+    text-align: center;
+    flex: 20%;
+    padding: 35px;
+    @media (max-width: 768px) {
+      padding: 35px 5px 5px 5px;
+    }
+  }
+  .choices-label {
+    text-align: center;
+    font-size: large;
+    font-weight: bold;
+    padding: 12px;
+  }
+  .information {
+    text-justify: auto;
+    padding-left: 75px;
+    padding-right: 75px;
+  }
   .todoplugin-modal-icon {
     text-align: center;
     svg {

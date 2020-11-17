@@ -15,8 +15,7 @@ const FbPoor = (props) => {
       <h1>
         <strong>Poor</strong>
       </h1>
-      <h3>Time to think positive!</h3>
-      <h3>Lets turn this around together</h3>
+      <h3>Let's turn this around together</h3>
       <div className="guidance">
         <p>
           Accept that today you are experiencing low mood. What might be driving
@@ -24,7 +23,7 @@ const FbPoor = (props) => {
         </p>
         <p>
           Our mood is forever changing up and down, it is always temporary. What
-          resources do you have availalbe to you that might help?
+          resources do you have available to you that might help?
         </p>
         <ul>
           <li>Coffee with a close friend</li>
@@ -36,7 +35,7 @@ const FbPoor = (props) => {
           <strong>Need Help?</strong>
         </h5>
         <p>
-          Visit our company's intranet site for further information about
+          Visit the company's intranet site for further information about
           managing your emotional wellbeing.
         </p>
       </div>

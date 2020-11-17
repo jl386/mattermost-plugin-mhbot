@@ -315,17 +315,28 @@ export default class SidebarRight extends React.PureComponent {
           className="SidebarRight"
         >
           <div>
+            <div>
+              <div
+                className="dhelp"
+                onClick={() => {
+                  this.props.actions.openRootModal("");
+                }}
+              >
+                <i className="fa fa-info-circle" /> Help
+              </div>
+              {this.props.lastRating.score && (
+                <div className="label-yesterday-rating">
+                  Previous Rating:{" "}
+                  <ScoreToText
+                    score={this.props.lastRating.score}
+                  ></ScoreToText>
+                </div>
+              )}
+            </div>
+            <br></br>
             <div className="welcome-user">
               Today's Rating:
               {this.getFeedback(this.props.lastRating.score)}
-            </div>
-            <div
-              className="dhelp"
-              onClick={() => {
-                this.props.actions.openRootModal("");
-              }}
-            >
-              <i className="fa fa-info-circle" /> Help
             </div>
           </div>
         </Scrollbars>

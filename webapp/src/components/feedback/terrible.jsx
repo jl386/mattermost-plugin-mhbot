@@ -16,7 +16,6 @@ const FbTerrible = (props) => {
         <strong>Terrible</strong>
       </h1>
       <h3>It's okay to seek help</h3>
-      <h3>We all need help from time to time</h3>
       <div className="guidance">
         <p>
           Know that it is okay to reach out about a Mental Health challenge, you
@@ -27,7 +26,9 @@ const FbTerrible = (props) => {
         <ul>
           <li>Book an appointment with your GP/Doctor</li>
           <li>Employee Assistance Programme</li>
-          <li>Samaritans Help Line</li>
+          <li>
+            <a href="#">National Crisis Help Lines</a>
+          </li>
         </ul>
         <br />
         <p>It will feel hard but know that you can come through this.</p>
@@ -36,7 +37,7 @@ const FbTerrible = (props) => {
           <strong>Need Help?</strong>
         </h5>
         <p>
-          Visit our company's intranet site for further information about
+          Visit the company's intranet site for further information about
           managing your emotional wellbeing.
         </p>
       </div>

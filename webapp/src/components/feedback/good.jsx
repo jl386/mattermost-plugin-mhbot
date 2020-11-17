@@ -20,20 +20,20 @@ const FbGood = (props) => {
       <div className="guidance">
         <p>What is stopping you from being Excellent?</p>
         <p>
-          What are the 1 or 2 things that aren't going quite as well as they
-          could be?
+          Are there any small things you can do to on the road to Excellent?
+          Rememer to think about:
         </p>
         <ul>
           <li>Exercise</li>
           <li>Nutrition</li>
-          <li>Stress</li>
+          <li>Sleep</li>
         </ul>
         <br />
         <h5>
           <strong>Need Help?</strong>
         </h5>
         <p>
-          Visit our company's intranet site for further information about
+          Visit the company's intranet site for further information about
           managing your emotional wellbeing.
         </p>
       </div>

@@ -36,7 +36,7 @@ const FbExcellent = (props) => {
           <strong>Need Help?</strong>
         </h5>
         <p>
-          Visit our company's intranet site for further information about
+          Visit the company's intranet site for further information about
           managing your emotional wellbeing.
         </p>
       </div>

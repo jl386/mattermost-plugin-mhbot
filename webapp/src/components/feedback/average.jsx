@@ -23,7 +23,7 @@ const FbAverage = (props) => {
             We all experience this a lot of the time. Time to take a step back
             and ask yourself what's missing? Why do I feel this way today?
           </p>
-          <p>What's driving a lower form? This is a good time to reflect.</p>
+          <p>What's holding you back? This is a good time to reflect.</p>
           <ul>
             <li>
               How well have I <strong>slept</strong> lately?
@@ -42,7 +42,7 @@ const FbAverage = (props) => {
             <strong>Need Help?</strong>
           </h5>
           <p>
-            Visit our company's intranet site for further information about
+            Visit the company's intranet site for further information about
             managing your emotional wellbeing.
           </p>
         </div>
