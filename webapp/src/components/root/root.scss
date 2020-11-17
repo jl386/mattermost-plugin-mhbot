@@ -1,0 +1,184 @@
+.ToDoPluginRootModal {
+  display: flex;
+  flex-direction: column;
+  padding-top: 60px;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  font-size: 16px;
+  @media (max-width: 768px) {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  h1 {
+    font-size: 38px;
+    margin-top: 16px;
+    margin-bottom: 20px;
+
+    text-align: center;
+    font-weight: 300;
+    line-height: 1;
+    strong {
+      font-weight: 400;
+    }
+  }
+  h2 {
+    padding-left: 75px;
+    padding-right: 75px;
+    text-align: center;
+    font-weight: 300;
+    line-height: 1.4;
+    font-style: italic;
+    strong {
+      font-weight: 400;
+    }
+  }
+  h3 {
+    margin-top: 20px;
+    font-size: x-large;
+  }
+  h6 {
+    font-size: x-small;
+    text-decoration: italic;
+  }
+
+  blockquote {
+    position: relative;
+    font-size: x-large;
+    margin-left: 5em;
+    margin-right: 5em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    padding: 0.5em 2em 0.5em 3em;
+    font-style: italic;
+  }
+  /* Thanks: http://callmenick.com/post/styling-blockquotes-with-css-pseudo-classes */
+  blockquote:before {
+    font-family: Georgia, serif;
+    position: absolute;
+    font-size: 6em;
+    line-height: 1;
+    top: 0;
+    left: 0;
+    content: "\201C";
+  }
+  blockquote:after {
+    font-family: Georgia, serif;
+    position: absolute;
+    /* display: block; don't use this, it raised the quote too high from the bottom - defeated line-height? */
+    float: right;
+    font-size: 6em;
+    line-height: 1;
+    right: 0;
+    bottom: -0.5em;
+    content: "\201D";
+  }
+  blockquote footer {
+    padding: 0 2em 0 0;
+    text-align: right;
+  }
+  blockquote cite:before {
+    content: "\2013";
+  }
+
+  .choices {
+    display: flex;
+  }
+  .choices-img {
+    text-align: center;
+    flex: 20%;
+    padding: 35px;
+    @media (max-width: 768px) {
+      padding: 35px 5px 5px 5px;
+    }
+  }
+  .choices-label {
+    text-align: center;
+    font-size: large;
+    font-weight: bold;
+    padding: 12px;
+  }
+  .information {
+    text-justify: auto;
+    padding-left: 75px;
+    padding-right: 75px;
+  }
+  .todoplugin-modal-icon {
+    text-align: center;
+    svg {
+      height: 32px;
+      width: 126px;
+      margin-right: 85px;
+    }
+  }
+
+  .todoplugin-issue {
+    max-width: 720px;
+    width: 100%;
+    margin-bottom: 28px;
+    .todoplugin-input {
+      height: 144px;
+      border: 1px solid var(--center-channel-color-16);
+      border-radius: 4px;
+      padding: 12px 14px;
+      width: 100%;
+      font-size: 14px;
+      resize: none;
+      overflow: auto;
+      &.todoplugin-one-line {
+        height: 48px;
+      }
+      &:focus {
+        border-color: var(--center-channel-color-32);
+      }
+    }
+    .todoplugin-help-text {
+      margin-top: 8px;
+    }
+  }
+
+  .todoplugin-button-container {
+    margin-bottom: 28px;
+    button {
+      padding: 13px 26px;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 4px;
+      &:focus,
+      &:active,
+      &:focus:active {
+        outline: none;
+        border-color: transparent;
+      }
+    }
+  }
+
+  .todoplugin-divider {
+    border-bottom: 1px solid var(--center-channel-color-32);
+    height: 1px;
+    width: 65%;
+    margin-top: 28px;
+    margin-bottom: 28px;
+  }
+
+  .todoplugin-clarification {
+    max-width: 720px;
+    width: 100%;
+    margin-bottom: 28px;
+    .todoplugin-question {
+      font-weight: 300;
+      font-size: 14px;
+      width: 100%;
+    }
+    .todoplugin-answer {
+      font-size: 12px;
+      width: 100%;
+      margin-bottom: 15px;
+    }
+  }
+  .todoplugin-add-to-thread {
+    max-width: 720px;
+    margin-bottom: 10px;
+  }
+}

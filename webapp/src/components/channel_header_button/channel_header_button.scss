@@ -1,0 +1,8 @@
+.mhbot-plugin-icon {
+  &:active,
+  &--active,
+  &--active:hover {
+    fill: var(--button-bg);
+    color: var(--button-bg);
+  }
+}

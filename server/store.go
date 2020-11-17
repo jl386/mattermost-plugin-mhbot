@@ -3,7 +3,9 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"strconv"
 
+	"github.com/mattermost/mattermost-server/v5/model"
 	"github.com/mattermost/mattermost-server/v5/plugin"
 	"github.com/pkg/errors"
 )
@@ -11,12 +13,18 @@ import (
 const (
 	// StoreRetries is the number of retries to use when storing lists fails on a race
 	StoreRetries = 3
-	//StoreNewRatingKey is something
+	//StoreRatingKey is something
 	StoreRatingKey = "ratings"
+	//StoreReminderKey is something
+	StoreReminderKey = "reminder"
 )
 
 func listKey(userID string) string {
 	return fmt.Sprintf("%s_%s", StoreRatingKey, userID)
+}
+
+func reminderKey(userID string) string {
+	return fmt.Sprintf("%s_%s", StoreReminderKey, userID)
 }
 
 type listStore struct {
@@ -52,6 +60,30 @@ func (l *listStore) getList(userID string) ([]*Rating, []byte, error) {
 	}
 
 	return list, originalJSONList, nil
+}
+
+func (l *listStore) GetLastRatingList(userID string, number int) ([]*Rating, error) {
+	list, err := l.GetList(userID)
+	if err != nil {
+		return nil, nil
+	}
+	if len(list) < number {
+		return nil, errors.New("Not enough ratings found")
+	}
+	lastRatings := list[len(list)-number:]
+	return lastRatings, nil
+}
+
+func (l *listStore) GetLastRating(userID string) (*Rating, error) {
+	list, err := l.GetList(userID)
+	if err != nil {
+		return nil, nil
+	}
+	if len(list) == 0 {
+		return nil, errors.New("No ratings found")
+	}
+	lastRating := list[len(list)-1]
+	return lastRating, nil
 }
 
 func (l *listStore) AddRating(userID string, rating *Rating) error {
@@ -98,4 +130,31 @@ func (l *listStore) saveList(userID string, list []*Rating, originalJSONList []b
 	}
 
 	return ok, nil
+}
+
+func (p *Plugin) saveLastReminderTimeForUser(userID string) error {
+	strTime := strconv.FormatInt(model.GetMillis(), 10)
+	appErr := p.API.KVSet(reminderKey(userID), []byte(strTime))
+	if appErr != nil {
+		return errors.New(appErr.Error())
+	}
+	return nil
+}
+
+func (p *Plugin) getLastReminderTimeForUser(userID string) (int64, error) {
+	timeBytes, appErr := p.API.KVGet(reminderKey(userID))
+	if appErr != nil {
+		return 0, errors.New(appErr.Error())
+	}
+
+	if timeBytes == nil {
+		return 0, nil
+	}
+
+	reminderAt, err := strconv.ParseInt(string(timeBytes), 10, 64)
+	if err != nil {
+		return 0, err
+	}
+
+	return reminderAt, nil
 }
