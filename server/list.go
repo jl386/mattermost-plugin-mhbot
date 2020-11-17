@@ -18,6 +18,7 @@ type ListStore interface {
 
 	// Issue References related functions
 	GetLastRating(userID string) (*Rating, error)
+	GetLastRatingList(userID string, number int) ([]*Rating, error)
 	GetList(userID string) ([]*Rating, error)
 }
 
@@ -66,4 +67,13 @@ func (l *listManager) GetLastRating(userID string) (*Rating, bool, error) {
 		return rating, true, nil
 	}
 	return rating, false, nil
+}
+
+func (l *listManager) GetLastRatingList(userID string, number int) ([]*Rating, error) {
+	// Get last rating
+	res, err := l.store.GetLastRatingList(userID, number)
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
 }

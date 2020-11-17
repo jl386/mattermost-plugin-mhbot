@@ -1,8 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { OverlayTrigger, Popover } from "react-bootstrap";
 
 const ScoreToText = (props) => {
   let message;
+
   switch (props.score) {
     case 1:
       message = "Excellent";
@@ -23,13 +25,17 @@ const ScoreToText = (props) => {
       message = "Unknown";
       break;
   }
+
   return (
     <React.Fragment>
-      <span>{message}</span>
+      {(props.notes === "" && <span>{message}</span>) || <span>{message}</span>}
     </React.Fragment>
   );
 };
 
-ScoreToText.propTypes = { score: PropTypes.string.isRequired };
+ScoreToText.propTypes = {
+  score: PropTypes.number.isRequired,
+  notes: PropTypes.string.isRequired,
+};
 
 export default ScoreToText;

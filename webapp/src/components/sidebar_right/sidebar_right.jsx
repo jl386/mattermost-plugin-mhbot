@@ -52,6 +52,7 @@ export default class SidebarRight extends React.PureComponent {
       vote: PropTypes.func.isRequired,
       share: PropTypes.func.isRequired,
       openRootModal: PropTypes.func.isRequired,
+      openTrendModal: PropTypes.func.isRequired,
       setVisible: PropTypes.func.isRequired,
     }).isRequired,
   };
@@ -120,10 +121,14 @@ export default class SidebarRight extends React.PureComponent {
             >
               <i className="fa fa-info-circle" /> Help
             </div>
+
             {this.props.lastRating.score && (
               <div className="label-yesterday-rating">
                 Previous Rating:{" "}
-                <ScoreToText score={this.props.lastRating.score}></ScoreToText>
+                <ScoreToText
+                  score={this.props.lastRating.score}
+                  notes={this.props.lastRating.notes}
+                ></ScoreToText>
               </div>
             )}
           </div>
@@ -278,7 +283,7 @@ export default class SidebarRight extends React.PureComponent {
           <div className="share-button">
             <ShareButton
               share={this.props.actions.share}
-              score={this.state.score}
+              score={this.state.score || "0"}
               notes={this.state.notes}
             ></ShareButton>
           </div>
@@ -324,14 +329,14 @@ export default class SidebarRight extends React.PureComponent {
               >
                 <i className="fa fa-info-circle" /> Help
               </div>
-              {this.props.lastRating.score && (
-                <div className="label-yesterday-rating">
-                  Previous Rating:{" "}
-                  <ScoreToText
-                    score={this.props.lastRating.score}
-                  ></ScoreToText>
-                </div>
-              )}
+              <div
+                className="dhelp"
+                onClick={() => {
+                  this.props.actions.openTrendModal("trend");
+                }}
+              >
+                <i className="fa fa-line-chart" /> Trend
+              </div>
             </div>
             <br></br>
             <div className="welcome-user">

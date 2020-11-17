@@ -5,7 +5,9 @@ import * as UserActions from "mattermost-redux/actions/users";
 import { id as pluginId } from "./manifest";
 import {
     OPEN_ROOT_MODAL,
+    OPEN_TREND_MODAL,
     CLOSE_ROOT_MODAL,
+    CLOSE_TREND_MODAL,
     RECEIVED_SHOW_RHS_ACTION,
     UPDATE_RHS_STATE,
     SET_RHS_VISIBLE,
@@ -22,6 +24,18 @@ export const openRootModal = () => (dispatch) => {
 export const closeRootModal = () => (dispatch) => {
     dispatch({
         type: CLOSE_ROOT_MODAL,
+    });
+};
+
+export const openTrendModal = () => (dispatch) => {
+    dispatch({
+        type: OPEN_TREND_MODAL,
+    });
+};
+
+export const closeTrendModal = () => (dispatch) => {
+    dispatch({
+        type: CLOSE_TREND_MODAL,
     });
 };
 

@@ -7,6 +7,9 @@ export const getLastRating = (state) => getPluginState(state).lastRating;
 export const isRootModalVisible = (state) =>
     getPluginState(state).rootModalVisible;
 
+export const isTrendModalVisible = (state) =>
+    getPluginState(state).trendModalVisible;
+
 export const getShowRHSAction = (state) =>
     getPluginState(state).rhsPluginAction;
 

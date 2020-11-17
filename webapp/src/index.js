@@ -3,6 +3,7 @@ import React from "react";
 import { id as pluginId } from "./manifest";
 
 import Root from "./components/root";
+import Trend from "./components/trend";
 import SidebarRight from "./components/sidebar_right";
 
 import {
@@ -23,14 +24,16 @@ const activityTimeout = 60 * 60 * 1000; // 1 hour
 export default class Plugin {
     initialize(registry, store) {
         registry.registerReducer(reducer);
+        registry.registerRootComponent(Trend, "trend");
         registry.registerRootComponent(Root);
 
+        registry.register;
         const {
             toggleRHSPlugin,
             showRHSPlugin,
         } = registry.registerRightHandSidebarComponent(
             SidebarRight,
-            "Mental Health Coach"
+            "Head Coach"
         );
         store.dispatch(setShowRHSAction(() => store.dispatch(showRHSPlugin)));
 
@@ -39,7 +42,7 @@ export default class Plugin {
             () => {
                 store.dispatch(toggleRHSPlugin);
             },
-            "Mental Health Coach",
+            "Head Coach",
             "Share how you are feeling today."
         );
 

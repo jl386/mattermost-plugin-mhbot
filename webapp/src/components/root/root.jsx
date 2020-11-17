@@ -55,7 +55,7 @@ export default class Root extends React.Component {
     return (
       <FullScreenModal show={visible} onClose={close}>
         <div style={style.modal} className="ToDoPluginRootModal">
-          <h1>Mental Health Coach</h1>
+          <h1>Head Coach</h1>
           <blockquote>
             Ninety percent of workers have been touched by mental health
             challenges, either personally or through someone they are close to
