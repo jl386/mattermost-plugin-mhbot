@@ -26,6 +26,7 @@ import FbPoor from "../feedback/poor";
 import FbTerrible from "../feedback/terrible";
 
 import { filterProfiles } from "mattermost-redux/selectors/entities/users";
+import ScoreToText from "components/feedback/score_to_text";
 
 export function renderView(props) {
   return <div {...props} className="scrollbar--view" />;
@@ -110,19 +111,32 @@ export default class SidebarRight extends React.PureComponent {
           renderView={renderView}
           className="SidebarRight"
         >
-          {this.props.lastRating.score && (
-            <div className="label-yesterday-rating">
-              Previous Rating: {this.props.lastRating.score}
+          <div>
+            <div
+              className="dhelp"
+              onClick={() => {
+                this.props.actions.openRootModal("");
+              }}
+            >
+              <i className="fa fa-info-circle" /> Help
             </div>
-          )}
-
-          <div className="welcome-user">
-            Hi {this.props.currentUser.first_name},
+            {this.props.lastRating.score && (
+              <div className="label-yesterday-rating">
+                Previous Rating:{" "}
+                <ScoreToText score={this.props.lastRating.score}></ScoreToText>
+              </div>
+            )}
           </div>
-          <div className="welcome-message">
-            How is your emotional health today?
+          <br></br>
+          <div>
+            <div className="welcome-user">
+              Hi {this.props.currentUser.first_name},
+            </div>
+            <div className="welcome-message">
+              How is your emotional health today?
+            </div>
           </div>
-
+          <br></br>
           <div className="choices">
             <div>
               <button
@@ -268,17 +282,6 @@ export default class SidebarRight extends React.PureComponent {
               notes={this.state.notes}
             ></ShareButton>
           </div>
-          <div
-            onClick={() => {
-              this.props.actions.openRootModal("");
-              console.log("heeep");
-            }}
-          >
-            <span>
-              <i className="icon fa fa-plus-circle" />
-              Help
-            </span>
-          </div>
         </Scrollbars>
       </React.Fragment>
     );
@@ -311,8 +314,20 @@ export default class SidebarRight extends React.PureComponent {
           renderView={renderView}
           className="SidebarRight"
         >
-          <div className="welcome-user">Today's Rating:</div>
-          {this.getFeedback(this.props.lastRating.score)}
+          <div>
+            <div className="welcome-user">
+              Today's Rating:
+              {this.getFeedback(this.props.lastRating.score)}
+            </div>
+            <div
+              className="dhelp"
+              onClick={() => {
+                this.props.actions.openRootModal("");
+              }}
+            >
+              <i className="fa fa-info-circle" /> Help
+            </div>
+          </div>
         </Scrollbars>
       </React.Fragment>
     );

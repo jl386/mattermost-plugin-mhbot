@@ -49,7 +49,7 @@ export default class Root extends React.Component {
     return (
       <FullScreenModal show={visible} onClose={close}>
         <div style={style.modal} className="ToDoPluginRootModal">
-          <h1>{"Add a Todo"}</h1>
+          <h1>{"Mental Health Coach"}</h1>
         </div>
       </FullScreenModal>
     );
