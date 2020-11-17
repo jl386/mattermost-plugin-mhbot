@@ -1,131 +1,62 @@
-# Plugin Starter Template [![CircleCI branch](https://img.shields.io/circleci/project/github/mattermost/mattermost-plugin-starter-template/master.svg)](https://circleci.com/gh/mattermost/mattermost-plugin-starter-template)
+# Head Coach
 
-This plugin serves as a starting point for writing a Mattermost plugin. Feel free to base your own plugin off this repository.
+Joe Leveridge's submission for Mattermost Hackfest 2020.
 
-To learn more about plugins, see [our plugin documentation](https://developers.mattermost.com/extend/plugins/).
+## Demo
 
-## Getting Started
-Use GitHub's template feature to make a copy of this repository by clicking the "Use this template" button.
+Please see link to a short video summarising the problem statement and showing the working prototype:
+[Summary Video and Prototype Demo](https://biteable.com/watch/hackathon-2020-2728140)
 
-Alternatively shallow clone the repository matching your plugin name:
-```
-git clone --depth 1 https://github.com/mattermost/mattermost-plugin-starter-template com.example.my-plugin
-```
+## Features
 
-Note that this project uses [Go modules](https://github.com/golang/go/wiki/Modules). Be sure to locate the project outside of `$GOPATH`.
+The Head Coach plugin helps you to regularly take a moment to reflect on how you are feeling.
 
-Edit the following files:
-1. `plugin.json` with your `id`, `name`, and `description`:
-```
-{
-    "id": "com.example.my-plugin",
-    "name": "My Plugin",
-    "description": "A plugin to enhance Mattermost."
-}
-```
+The Mattermost 'Head Coach' will send you a daily reminder message to rate "How is your emotional health today?" through a simple UI. You can also make a note of any specific factors that are contributing to your current mental state.
 
-2. `go.mod` with your Go module path, following the `<hosting-site>/<repository>/<module>` convention:
-```
-module github.com/example/my-plugin
-```
+Head Coach will acknowledge your submission and provide guidance on you can either improve your mental state or share your energy with others.
 
-3. `.golangci.yml` with your Go module path:
-```yml
-linters-settings:
-  # [...]
-  goimports:
-    local-prefixes: github.com/example/my-plugin
-```
+## Screenshots
 
-Build your plugin:
-```
-make
-```
+### Main View
 
-This will produce a single plugin file (with support for multiple architectures) for upload to your Mattermost server:
+Icon showing doctor with stethoscope in header menu opens sidebar view.
 
-```
-dist/com.example.my-plugin.tar.gz
-```
+![Plugin View](https://github.com/jl386/mattermost-plugin-mhbot/blob/master/screenshots/Rate_Score.png?raw=true)
 
-## Development
+The emotion is highlighted once it has been clicked. User can type an optional note in the notes field and submit by clicking the share button.
 
-To avoid having to manually install your plugin, build and deploy your plugin using one of the following options.
+![Plugin View Selected Option](https://github.com/jl386/mattermost-plugin-mhbot/blob/master/screenshots/Rate_Score3.png?raw=true)
 
-### Deploying with Local Mode
+After your first submission, your last rating will be shown at the top of the bar.
 
-If your Mattermost server is running locally, you can enable [local mode](https://docs.mattermost.com/administration/mmctl-cli-tool.html#local-mode) to streamline deploying your plugin. Edit your server configuration as follows:
+![enter image description here](https://github.com/jl386/mattermost-plugin-mhbot/blob/master/screenshots/Rate_Score2.png?raw=true)
 
-```json
-{
-    "ServiceSettings": {
-        ...
-        "EnableLocalMode": true,
-        "LocalModeSocketLocation": "/var/tmp/mattermost_local.socket"
-    }
-}
-```
+### Information (Help) Modal
 
-and then deploy your plugin:
-```
-make deploy
-```
+If you click the Help icon you are presented with further information about the bot.
 
-You may also customize the Unix socket path:
-```
-export MM_LOCALSOCKETPATH=/var/tmp/alternate_local.socket
-make deploy
-```
+![Information Modal](https://github.com/jl386/mattermost-plugin-mhbot/blob/master/screenshots/Info_Modal.png?raw=true)
 
-If developing a plugin with a webapp, watch for changes and deploy those automatically:
-```
-export MM_SERVICESETTINGS_SITEURL=http://localhost:8065
-export MM_ADMIN_TOKEN=j44acwd8obn78cdcx7koid4jkr
-make watch
-```
+### Score Guidance
 
-### Deploying with credentials
+Once you have shared your rating, the bot acknowledges your submission and provides some guidance based on your rating.
 
-Alternatively, you can authenticate with the server's API with credentials:
-```
-export MM_SERVICESETTINGS_SITEURL=http://localhost:8065
-export MM_ADMIN_USERNAME=admin
-export MM_ADMIN_PASSWORD=password
-make deploy
-```
+| Excellent                                                                                                                       | Good                                                                                                                  | Average                                                                                                                     | Poor                                                                                                                  | Terrible                                                                                                                      |
+| ------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| ![Excellent Feedback](https://github.com/jl386/mattermost-plugin-mhbot/blob/master/screenshots/Feedback_Excellent.png?raw=true) | ![Good Feedback](https://github.com/jl386/mattermost-plugin-mhbot/blob/master/screenshots/Feedback_Good.png?raw=true) | ![Average Feedback](https://github.com/jl386/mattermost-plugin-mhbot/blob/master/screenshots/Feedback_Average.png?raw=true) | ![Poor Feedback](https://github.com/jl386/mattermost-plugin-mhbot/blob/master/screenshots/Feedback_Poor.png?raw=true) | ![Terrible Feedback](https://github.com/jl386/mattermost-plugin-mhbot/blob/master/screenshots/Feedback_Terrible.png?raw=true) |
 
-or with a [personal access token](https://docs.mattermost.com/developer/personal-access-tokens.html):
-```
-export MM_SERVICESETTINGS_SITEURL=http://localhost:8065
-export MM_ADMIN_TOKEN=j44acwd8obn78cdcx7koid4jkr
-make deploy
-```
+## To Do
 
-## Q&A
+This is just the beginning! Some of the features I wanted to look at but ran out of time include:
 
-### How do I make a server-only or web app-only plugin?
+-   **Trends** (Ability to view your last X scores and notes on a chart)
 
-Simply delete the `server` or `webapp` folders and remove the corresponding sections from `plugin.json`. The build scripts will skip the missing portions automatically.
+-   **Trend Analysis** (Head Coach bot to notice when you take a leap or a dip, send a congratulatory GIF when you move from good->excellent, or send further guidance when you fall from average->poor).
 
-### How do I include assets in the plugin bundle?
+-   **Circle of Trust** (Configure your closely trusted private circle to which you automatically share your scores/trends. Friends can be notified to reach out when you are feeling low)
 
-Place them into the `assets` directory. To use an asset at runtime, build the path to your asset and open as a regular file:
+-   **Mental Health First Aid** (Head Coach connects you to an available mental health first aider.)
 
-```go
-bundlePath, err := p.API.GetBundlePath()
-if err != nil {
-    return errors.Wrap(err, "failed to get bundle path")
-}
+    -   Mattermost: Automatically create the direct channel. Through sidebar, provide the first aider with conversation starters which can be automatically posted on their behalf when clicked)
 
-profileImage, err := ioutil.ReadFile(filepath.Join(bundlePath, "assets", "profile_image.png"))
-if err != nil {
-    return errors.Wrap(err, "failed to read profile image")
-}
-
-if appErr := p.API.SetProfileImage(userID, profileImage); appErr != nil {
-    return errors.Wrap(err, "failed to set profile image")
-}
-```
-
-### How do I build the plugin with unminified JavaScript?
-Setting the `MM_DEBUG` environment variable will invoke the debug builds. The simplist way to do this is to simply include this variable in your calls to `make` (e.g. `make dist MM_DEBUG=1`).
+    -   Jitsi: Automatically kick-off a video call with your designated first aider or member of circle of trust

@@ -2,7 +2,8 @@ package main
 
 import "github.com/mattermost/mattermost-server/v5/model"
 
-// PostBotDM posts a DM as the cloud bot user.
+// Taken from https://github.com/mattermost/mattermost-plugin-todo/blob/master/server/bot.go
+
 func (p *Plugin) PostBotDM(userID string, message string) {
 	p.createBotPostDM(&model.Post{
 		UserId:  p.botUserID,

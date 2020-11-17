@@ -10,6 +10,8 @@ import (
 	"github.com/mattermost/mattermost-server/v5/plugin"
 )
 
+// Elements take from https://github.com/mattermost/mattermost-plugin-welcomebot/blob/master/server/command.go
+
 const commandHelp = `* |/headcoach info | - provide information about this bot.`
 
 const (

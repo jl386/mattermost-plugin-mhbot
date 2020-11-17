@@ -7,7 +7,6 @@ import {
 } from "mattermost-redux/utils/theme_utils";
 
 import FullScreenModal from "../modals/full_screen_modal.jsx";
-import ReflectionModal from "../modals/reflection_modal.jsx";
 
 import "./root.scss";
 
@@ -26,21 +25,7 @@ export default class Root extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      message: null,
-      sendTo: null,
-      attachToThread: false,
-    };
-  }
-
-  static getDerivedStateFromProps(props, state) {
-    if (props.visible && state.message == null) {
-      return { message: props.message };
-    }
-    if (!props.visible && (state.message != null || state.sendTo != null)) {
-      return { message: null, sendTo: null, attachToThread: false };
-    }
-    return null;
+    this.state = {};
   }
 
   render() {
@@ -58,7 +43,7 @@ export default class Root extends React.Component {
 
     return (
       <FullScreenModal show={visible} onClose={close}>
-        <div style={style.modal} className="ToDoPluginRootModal">
+        <div style={style.modal} className="HeadCoachRootModal">
           <h1>Head Coach</h1>
           <blockquote>
             Ninety percent of workers have been touched by mental health

@@ -25,8 +25,6 @@ type ListManager interface {
 	AddRating(userID, notes string, score int) (*Rating, error)
 	GetLastRating(userID string) (*Rating, bool, error)
 	GetLastRatingList(userID string, number int) ([]*Rating, error)
-	// GetUserName returns the readable username from userID
-	GetUserName(userID string) string
 }
 
 // Plugin implements the interface expected by the Mattermost server to communicate between the server and plugin processes.
@@ -142,10 +140,12 @@ func (p *Plugin) handleAdd(w http.ResponseWriter, r *http.Request) {
 
 func (p *Plugin) handleGetLast(w http.ResponseWriter, r *http.Request) {
 	userID := r.Header.Get("Mattermost-User-ID")
+
 	if userID == "" {
 		http.Error(w, "Not authorized", http.StatusUnauthorized)
 		return
 	}
+
 	rating, today, err := p.listManager.GetLastRating(userID)
 	if err != nil {
 		p.API.LogError("Unable to get rating for user err=" + err.Error())
@@ -153,11 +153,31 @@ func (p *Plugin) handleGetLast(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	resp := getLastAPIRequest{ID: rating.ID, Score: rating.Score, CreatedAt: rating.CreateAt, Notes: rating.Notes, Today: today}
+	trigger := false
 
-	// trigger reminder
-	if resp.Today == false {
+	if rating != nil {
+		resp := getLastAPIRequest{ID: rating.ID, Score: rating.Score, CreatedAt: rating.CreateAt, Notes: rating.Notes, Today: today}
 
+		if resp.Today == false {
+			trigger = true
+		}
+
+		ratingJSON, err := json.Marshal(resp)
+
+		if err != nil {
+			p.API.LogError("Unable marhsal issues list to json err=" + err.Error())
+			p.handleErrorWithCode(w, http.StatusInternalServerError, "Unable marhsal issues list to json", err)
+			return
+		}
+
+		_, err = w.Write(ratingJSON)
+		if err != nil {
+			p.API.LogError("Unable to write json response err=" + err.Error())
+		}
+
+	}
+
+	if rating == nil || trigger == true {
 		var lastReminderAt int64
 		lastReminderAt, err = p.getLastReminderTimeForUser(userID)
 		if err != nil {
@@ -181,18 +201,6 @@ func (p *Plugin) handleGetLast(w http.ResponseWriter, r *http.Request) {
 				p.API.LogError("Unable to save last reminder for user err=" + err.Error())
 			}
 		}
-	}
-
-	ratingJSON, err := json.Marshal(resp)
-	if err != nil {
-		p.API.LogError("Unable marhsal issues list to json err=" + err.Error())
-		p.handleErrorWithCode(w, http.StatusInternalServerError, "Unable marhsal issues list to json", err)
-		return
-	}
-
-	_, err = w.Write(ratingJSON)
-	if err != nil {
-		p.API.LogError("Unable to write json response err=" + err.Error())
 	}
 }
 

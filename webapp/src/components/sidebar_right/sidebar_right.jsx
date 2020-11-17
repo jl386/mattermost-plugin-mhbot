@@ -16,8 +16,6 @@ import GoodSvg from "images/2_good.svg";
 import AverageSvg from "images/3_average.svg";
 import PoorSvg from "images/4_poor.svg";
 import TerribleSvg from "images/5_terrible.svg";
-import { throws } from "assert";
-import { runInThisContext } from "vm";
 
 import FbExcellent from "../feedback/excellent";
 import FbGood from "../feedback/good";
@@ -25,7 +23,6 @@ import FbAverage from "../feedback/average";
 import FbPoor from "../feedback/poor";
 import FbTerrible from "../feedback/terrible";
 
-import { filterProfiles } from "mattermost-redux/selectors/entities/users";
 import ScoreToText from "components/feedback/score_to_text";
 
 export function renderView(props) {
@@ -59,10 +56,7 @@ export default class SidebarRight extends React.PureComponent {
   constructor(props) {
     super(props);
 
-    this.state = {
-      showInbox: true,
-      showMy: true,
-    };
+    this.state = {};
   }
 
   handleNote = (e) => {
