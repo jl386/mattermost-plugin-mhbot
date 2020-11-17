@@ -8,4 +8,4 @@ export const CLOSE_TREND_MODAL = pluginId + "_close_trend_modal";
 export const RECEIVED_SHOW_RHS_ACTION = pluginId + "_show_rhs";
 export const UPDATE_RHS_STATE = pluginId + "_update_rhs_state";
 export const SET_RHS_VISIBLE = pluginId + "_set_rhs_visible";
-export const TREND_VIEW = pluginId + "_trend_view";
+export const TRENDVIEW = pluginId + "_trend_view";
