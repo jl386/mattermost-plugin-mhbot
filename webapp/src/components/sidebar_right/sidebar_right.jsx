@@ -52,7 +52,6 @@ export default class SidebarRight extends React.PureComponent {
       vote: PropTypes.func.isRequired,
       share: PropTypes.func.isRequired,
       openRootModal: PropTypes.func.isRequired,
-      openTrendModal: PropTypes.func.isRequired,
       setVisible: PropTypes.func.isRequired,
     }).isRequired,
   };
@@ -329,15 +328,8 @@ export default class SidebarRight extends React.PureComponent {
               >
                 <i className="fa fa-info-circle" /> Help
               </div>
-              <div
-                className="dhelp"
-                onClick={() => {
-                  this.props.actions.openTrendModal("trend");
-                }}
-              >
-                <i className="fa fa-line-chart" /> Trend
-              </div>
             </div>
+
             <br></br>
             <div className="welcome-user">
               Today's Rating:

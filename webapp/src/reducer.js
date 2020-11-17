@@ -3,9 +3,8 @@ import { combineReducers } from "redux";
 import {
     GET_LAST_RATING,
     OPEN_ROOT_MODAL,
-    OPEN_TREND_MODAL,
     CLOSE_ROOT_MODAL,
-    CLOSE_TREND_MODAL,
+    TRENDVIEW,
     RECEIVED_SHOW_RHS_ACTION,
     UPDATE_RHS_STATE,
     SET_RHS_VISIBLE,
@@ -21,19 +20,10 @@ const lastRating = (state = ["No ratings found"], action) => {
     }
 };
 
-const trendModalVisible = (state = false, action) => {
-    switch (action.type) {
-        case OPEN_TREND_MODAL:
-            return true;
-        case CLOSE_TREND_MODAL:
-            return false;
-        default:
-            return state;
-    }
-};
-
 const rootModalVisible = (state = false, action) => {
     switch (action.type) {
+        case TRENDVIEW:
+            return false;
         case OPEN_ROOT_MODAL:
             return true;
         case CLOSE_ROOT_MODAL:
@@ -81,7 +71,6 @@ function isTeamSidebarHidden(state = false, action) {
 
 export default combineReducers({
     lastRating,
-    trendModalVisible,
     rootModalVisible,
     rhsState,
     rhsPluginAction,

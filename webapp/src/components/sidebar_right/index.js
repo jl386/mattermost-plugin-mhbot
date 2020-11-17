@@ -7,7 +7,6 @@ import { bindActionCreators } from "redux";
 import { getLastRating, getSiteURL } from "../../selectors";
 import {
     openRootModal,
-    openTrendModal,
     setRhsVisible,
     getLast,
     vote,
@@ -33,7 +32,6 @@ function mapDispatchToProps(dispatch) {
                 vote,
                 share,
                 openRootModal,
-                openTrendModal,
                 setVisible: setRhsVisible,
             },
             dispatch

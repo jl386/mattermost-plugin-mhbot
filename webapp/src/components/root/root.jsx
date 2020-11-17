@@ -44,10 +44,14 @@ export default class Root extends React.Component {
   }
 
   render() {
-    const { visible, theme, close } = this.props;
+    const { visible, theme, close, trendView } = this.props;
 
     if (!visible) {
       return null;
+    }
+
+    if (trendView) {
+      console.log("Check my trend!!");
     }
 
     const style = getStyle(theme);
