@@ -10,6 +10,8 @@ import (
 	"github.com/pkg/errors"
 )
 
+// Elements copied from https://github.com/mattermost/mattermost-plugin-todo/blob/master/server/store.go
+
 const (
 	// StoreRetries is the number of retries to use when storing lists fails on a race
 	StoreRetries = 3

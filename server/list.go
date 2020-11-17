@@ -35,14 +35,6 @@ func NewListManager(api plugin.API) ListManager {
 	}
 }
 
-func (l *listManager) GetUserName(userID string) string {
-	user, err := l.api.GetUser(userID)
-	if err != nil {
-		return "Someone"
-	}
-	return user.Username
-}
-
 func (l *listManager) AddRating(userID, notes string, score int) (*Rating, error) {
 
 	rating := newRating(notes, score)

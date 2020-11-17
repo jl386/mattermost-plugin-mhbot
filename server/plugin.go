@@ -25,8 +25,6 @@ type ListManager interface {
 	AddRating(userID, notes string, score int) (*Rating, error)
 	GetLastRating(userID string) (*Rating, bool, error)
 	GetLastRatingList(userID string, number int) ([]*Rating, error)
-	// GetUserName returns the readable username from userID
-	GetUserName(userID string) string
 }
 
 // Plugin implements the interface expected by the Mattermost server to communicate between the server and plugin processes.
