@@ -52,13 +52,17 @@ func (l *listManager) GetLastRating(userID string) (*Rating, bool, error) {
 	if err != nil {
 		return nil, false, err
 	}
-	// Check if last rating was shared today
-	ca := time.Unix(rating.CreateAt/1000, 0)
-	now := time.Now()
-	if now.Day() == ca.Day() && now.Month() == ca.Month() && now.Year() == ca.Year() {
-		return rating, true, nil
+	if rating != nil {
+		// Check if last rating was shared today
+		ca := time.Unix(rating.CreateAt/1000, 0)
+		now := time.Now()
+		if now.Day() == ca.Day() && now.Month() == ca.Month() && now.Year() == ca.Year() {
+			return rating, true, nil
+		}
+		return rating, false, nil
 	}
-	return rating, false, nil
+	return nil, false, nil
+
 }
 
 func (l *listManager) GetLastRatingList(userID string, number int) ([]*Rating, error) {

@@ -1,5 +1,4 @@
-// Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
-// See LICENSE.txt for license information.
+// Elements taken from https://github.com/mattermost/mattermost-plugin-todo/blob/master/webapp/src/components/channel_header_button/channel_header_button.tsx
 
 import React from 'react';
 

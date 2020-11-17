@@ -1,5 +1,4 @@
-// Copyright (c) 2015-present Mattermost, Inc. All Rights Reserved.
-// See LICENSE.txt for license information.
+// Elements taken from https://github.com/mattermost/mattermost-plugin-todo/blob/master/webapp/src/components/sidebar_right/index.js
 
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";

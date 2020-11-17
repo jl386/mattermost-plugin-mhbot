@@ -79,10 +79,10 @@ func (l *listStore) GetLastRatingList(userID string, number int) ([]*Rating, err
 func (l *listStore) GetLastRating(userID string) (*Rating, error) {
 	list, err := l.GetList(userID)
 	if err != nil {
-		return nil, nil
+		return nil, errors.New("Error trying to get rating")
 	}
 	if len(list) == 0 {
-		return nil, errors.New("No ratings found")
+		return nil, nil
 	}
 	lastRating := list[len(list)-1]
 	return lastRating, nil

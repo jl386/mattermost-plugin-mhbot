@@ -1,6 +1,5 @@
 import { getConfig } from "mattermost-redux/selectors/entities/general";
 import { Client4 } from "mattermost-redux/client";
-import * as UserActions from "mattermost-redux/actions/users";
 
 import { id as pluginId } from "./manifest";
 import {
@@ -10,7 +9,6 @@ import {
     RECEIVED_SHOW_RHS_ACTION,
     UPDATE_RHS_STATE,
     SET_RHS_VISIBLE,
-    SET_HIDE_TEAM_SIDEBAR_BUTTONS,
     GET_LAST_RATING,
 } from "./action_types";
 
@@ -126,33 +124,6 @@ export const getLast = () => async (dispatch, getState) => {
         type: actionType,
         data,
     });
-
-    return { data };
-};
-
-export function setHideTeamSidebar(payload) {
-    return {
-        type: SET_HIDE_TEAM_SIDEBAR_BUTTONS,
-        payload,
-    };
-}
-
-export const updateConfig = () => async (dispatch, getState) => {
-    let resp;
-    let data;
-    try {
-        resp = await fetch(
-            getPluginServerRoute(getState()) + "/config",
-            Client4.getOptions({
-                method: "get",
-            })
-        );
-        data = await resp.json();
-    } catch (error) {
-        return { error };
-    }
-
-    dispatch(setHideTeamSidebar(data.hide_team_sidebar));
 
     return { data };
 };

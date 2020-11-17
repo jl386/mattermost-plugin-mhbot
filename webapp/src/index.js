@@ -1,20 +1,11 @@
 import React from "react";
-
 import { id as pluginId } from "./manifest";
-
 import Root from "./components/root";
-import Trend from "./components/trend";
 import SidebarRight from "./components/sidebar_right";
 
-import {
-    openRootModal,
-    getLast,
-    setShowRHSAction,
-    updateConfig,
-    setHideTeamSidebar,
-} from "./actions";
+import { getLast, setShowRHSAction } from "./actions";
 import reducer from "./reducer";
-import TeamSidebar from "./components/team_sidebar";
+
 import ChannelHeaderButton from "./components/channel_header_button";
 
 let activityFunc;
@@ -24,7 +15,6 @@ const activityTimeout = 60 * 60 * 1000; // 1 hour
 export default class Plugin {
     initialize(registry, store) {
         registry.registerReducer(reducer);
-        registry.registerRootComponent(Trend, "trend");
         registry.registerRootComponent(Root);
 
         registry.register;
